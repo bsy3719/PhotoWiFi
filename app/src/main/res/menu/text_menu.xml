@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_item_wifi"
+        android:id="@+id/menu_item_reco"
         app:showAsAction="ifRoom"
         android:title="@string/menu_photo"
-        android:icon="@drawable/ic_wifi"/>
+        android:icon="@drawable/ic_visibility"/>
 
     <item
-        android:id="@+id/menu_item_photo"
+        android:id="@+id/menu_item_check"
         app:showAsAction="ifRoom"
         android:title="@string/menu_photo"
-        android:icon="@drawable/ic_photo"/>
+        android:icon="@drawable/ic_check"/>
 
 </menu>

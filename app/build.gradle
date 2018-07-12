@@ -51,6 +51,8 @@ dependencies {
     //ml kit
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-ml-vision:16.0.0'
+    //이미지 크롭
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
 
 }
 apply plugin: 'com.google.gms.google-services'

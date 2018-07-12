@@ -13,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -42,40 +45,32 @@ import java.util.List;
 public class TextRecoActivity extends AppCompatActivity {
 
     private ActivityTextRecoBinding mBinding;
-    private WifiAdapter mWifiAdapter;
     private List<Uri> mUriList;
-    private List<Wifi> mWifiList = new ArrayList<>();
+    private List<String> mWordList = new ArrayList<>();
+
+    private int mCount = 0;
 
     private static final int REQUEST_CODE_IMAGE_PICKER = 200;
     private static final String TAG = "TextRecoActivity";
-
-    private List<ParsingText> mParsingList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_text_reco);
-        mBinding.wifiRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         checkPermission();
+
     }
 
     //클라우드 비전 api로 문자 인식
-    private void runCloudTextRecognition(Uri uri) {
+    private void runCloudTextRecognition(Bitmap bitmap) {
 
-        //FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(mSelectedImage);
-        FirebaseVisionImage image = null;
-        try {
-            image = FirebaseVisionImage.fromFilePath(TextRecoActivity.this, uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
 
         FirebaseVisionCloudDetectorOptions options =
                 new FirebaseVisionCloudDetectorOptions.Builder()
                         .setModelType(FirebaseVisionCloudDetectorOptions.LATEST_MODEL)
                         .setMaxResults(15)
                         .build();
-        //mCloudButton.setEnabled(false);
 
         FirebaseVisionCloudDocumentTextDetector detector = FirebaseVision.getInstance()
                 .getVisionCloudDocumentTextDetector(options);
@@ -84,7 +79,6 @@ public class TextRecoActivity extends AppCompatActivity {
                         new OnSuccessListener<FirebaseVisionCloudText>() {
                             @Override
                             public void onSuccess(FirebaseVisionCloudText texts) {
-                                //mCloudButton.setEnabled(true);
                                 processCloudTextRecognitionResult(texts);
                             }
                         })
@@ -92,20 +86,18 @@ public class TextRecoActivity extends AppCompatActivity {
                         new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                // Task failed with an exception
-                                //mCloudButton.setEnabled(true);
                                 e.printStackTrace();
                             }
                         });
     }
 
     private void processCloudTextRecognitionResult(FirebaseVisionCloudText text) {
+        mWordList.clear();
         // Task completed successfully
         if (text == null) {
             showToast("No text found");
             return;
         }
-        //mGraphicOverlay.clear();
         List<FirebaseVisionCloudText.Page> pages = text.getPages();
         for (int i = 0; i < pages.size(); i++) {
             FirebaseVisionCloudText.Page page = pages.get(i);
@@ -126,45 +118,34 @@ public class TextRecoActivity extends AppCompatActivity {
                         for (int m = 0; m < symbols.size(); m++) {
                             wordStr.append(symbols.get(m).getText());
                         }
-                        mParsingList.add(new ParsingText(wordStr.toString(), i, j, k, l));
-                        //wordList.add(wordStr.toString());
+                        mWordList.add(wordStr.toString());
                     }
                 }
             }
         }
 
-        parsingText(mParsingList);
+        parsingText(mWordList);
 
     }
 
-    private void parsingText(List<ParsingText> parsingList){
+    private void parsingText(List<String> wordList){
+
+        String completeWord = "";
+
         //문자 인식이 제대로 이루어 지는지 테스트
-        for (int i = 0; i < parsingList.size(); i++){
-            Log.d(TAG,  "page : " + parsingList.get(i).getPage() +
-                    " block : " + parsingList.get(i).getBlock() +
-                    " paragraph : " + parsingList.get(i).getParagraph() +
-                    " word : " + parsingList.get(i).getWord() +
-                    " index : " + Integer.toString(i) +
-                    " text : " + parsingList.get(i).getText());
-
+        for (int i = 0; i < wordList.size(); i++){
+            Log.d(TAG," index : " + Integer.toString(i) +
+                    " text : " + wordList.get(i));
+            completeWord = completeWord + wordList.get(i);
         }
 
-
-    }
-
-    //UI를 셋팅하고 업데이트
-    private void updateUI(){
-        mWifiList.add(new Wifi("id1", "pass1"));
-        mWifiList.add(new Wifi("id2", "pass2"));
-        mWifiList.add(new Wifi("id3", "pass3"));
-
-        if (mWifiAdapter == null){
-            mWifiAdapter = new WifiAdapter(mWifiList, this);
-            mBinding.wifiRecyclerView.setAdapter(mWifiAdapter);
-        } else {
-            mWifiAdapter.setmWifiList(mWifiList);
-            mWifiAdapter.notifyDataSetChanged();
+        if (mCount%2 == 0){
+            mBinding.idEditTextView.setText(completeWord);
+        } else{
+            mBinding.passwordEditTextView.setText(completeWord);
         }
+
+        mCount = mCount +1;
 
     }
 
@@ -214,13 +195,34 @@ public class TextRecoActivity extends AppCompatActivity {
                     mUriList = imageData.getParcelableArrayListExtra(Define.INTENT_PATH);
                     //mSelectedImage = uriToBitmap(mUriList.get(0));
                     //mSelectedImage = resizeBitamp(mSelectedImage);
-                    //Glide.with(this).load(mSelectedImage).into(mBinding.recoImageView);
-                    Glide.with(this).load(mUriList.get(0)).into(mBinding.recoImageView);
-                    runCloudTextRecognition(mUriList.get(0));
+                    //Glide.with(this).load(mUriList.get(0)).into(mBinding.recoImageView);
+                    mBinding.recoImageView.setImageUriAsync(mUriList.get(0));
+                    //runCloudTextRecognition(mUriList.get(0));
 
                 }
                 break;
         }
+    }
+
+    // 메뉴를 연동하고
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.text_menu, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.menu_item_reco:
+                runCloudTextRecognition(mBinding.recoImageView.getCroppedImage());
+                break;
+            case R.id.menu_item_check:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //토스트 메시지 호출

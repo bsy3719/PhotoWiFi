@@ -10,20 +10,32 @@
     android:orientation="vertical"
     tools:context=".Activity.TextRecoActivity">
 
-    <ImageView
+    <com.theartofdev.edmodo.cropper.CropImageView
         android:id="@+id/reco_image_view"
         android:layout_width="match_parent"
-        android:layout_height= "300dp"
-        android:layout_gravity="center"
+        android:layout_height="620dp"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"/>
+        android:gravity="top"/>
 
-    <android.support.v7.widget.RecyclerView
+    <!--<android.support.v7.widget.RecyclerView
         android:id="@+id/wifi_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"/>-->
+
+    <EditText
+        android:id="@+id/id_edit_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="bottom"/>
+
+    <EditText
+        android:id="@+id/password_edit_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="bottom"/>
 
 </LinearLayout>
 
