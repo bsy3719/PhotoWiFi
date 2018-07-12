@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PhotoWiFi</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_my_fragment">Hello MyWiFi fragment</string>
+    <string name="hello_list_fragment">Hello WiFiList fragment</string>
+
+    <string name="bottom_navi_my_wifi">Wi-Fi</string>
+    <string name="bottom_navi_list_wifi">list</string>
+
+    <string name="menu_photo">Photo</string>
+</resources>

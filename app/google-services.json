@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "800630747000",
+    "firebase_url": "https://photowifi-84a0f.firebaseio.com",
+    "project_id": "photowifi-84a0f",
+    "storage_bucket": "photowifi-84a0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800630747000:android:8a2d862ae35ee24c",
+        "android_client_info": {
+          "package_name": "com.example.baek.photowifi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "800630747000-t5qb3tj0798isvfn82s6kf7hovgr6uv6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.baek.photowifi",
+            "certificate_hash": "61a793b00e843e3e51127c5abb534fe569c808fa"
+          }
+        },
+        {
+          "client_id": "800630747000-e4ed9p5d2opbjiudpem6rp9mfff24dbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAWoQh973PRxUYfaotpA5c-md0sv47FpI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "800630747000-e4ed9p5d2opbjiudpem6rp9mfff24dbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
